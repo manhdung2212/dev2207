@@ -1,38 +1,61 @@
-.App {
+h1{
   text-align: center;
+  font-size: 72px;
+  font-weight: 300;
+  color: rgb(0, 67, 202);
+  opacity: .3;
+  margin: 32px auto;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.box{
+  width: 600px;
+  background: #fff;
+  box-shadow: 0 0 3px rgb(155, 155, 155);
+  margin: 0 auto;
+  box-sizing: border-box;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.box-header input{
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 40px; 
+  font-weight: 300;
+  border: none;
+  border-bottom: 1px solid rgb(144, 144, 144);
+  box-sizing: border-box;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.box-header input:focus{
+  outline: none;
+  border-bottom-color: rgba(0, 78, 188, 0.492);
+}
+.box-header input::placeholder{
+  font-weight: 200;
+  color: rgba(0, 78, 188, 0.492);
+}
+.box-body .item{
+  padding: 16px;
+  border-bottom: 1px solid rgb(209, 209, 209);
+  font-size: 20px;
+  position: relative;
+}
+.box-body .item button{
+  position: absolute;
+  top: 50%;  
+  right: 32px;
+  transform: translateY(-50%);
+  display: none;
+}
+.box-body .item.completed span{
+  color: rgb(94, 94, 94);
+  opacity: .5;
+  text-decoration: line-through;
+}
+.box-body .item:hover button{
+  display: block;
+}
+.d-flex{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.box-footer{
+  padding: 4px 20px;
 }
