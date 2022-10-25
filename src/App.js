@@ -25,74 +25,117 @@ class App extends Component {
     ]
 
     this.state = {
-      todos: todoDefaults
+      todos: todoDefaults,
+      displayStatus: "all"
     }
-
-    this.addNewTodo = this.addNewTodo.bind(this);
   }
 
-  addNewTodo2 = () => {
-    let obj = {
-      id: 5, 
-      name: 'Mới thêm', 
-      isCompleted: false
-    }
+  enterData = (event) => {
+    let val = event.target.value;
+    // check enter người dùng 
 
+    let {todos} = this.state; 
+    let ids = todos.map(x => x.id); 
+    let id = ids.length > 0? Math.max(...ids) + 1: 1;  
+    if(event.keyCode == 13){
+      let obj = {
+        id: id,
+        name: val, 
+        isCompleted: false
+      }
+
+      this.setState({
+        todos: [...this.state.todos, obj]
+      }); 
+
+      event.target.value = "";
+    }
+  }
+
+  changeStatusCompleted = (id) => {
+    let {todos} = this.state;  
+    let obj = todos.find(x => x.id == id);
+    obj.isCompleted = !obj.isCompleted; 
     this.setState({
-      todos: [...this.state.todos, obj]
+      todos: [...todos]
     });
   }
 
-  deleteTodo = (id) => {
+  // 1 function xoá item: nhận tham số là id 
+  // được gọi trong onClick - button delete trong todo componet
+  // xoá 1 phần tử trong mảng: sử dụng hàm filter để lọc các phần tử có giá trị khác giá trị
+  // truyền vào
+
+  deleteItem = (id) => {
+    let {todos} = this.state; 
+    let newArray = todos.filter(x => x.id != id);
     this.setState({
-      todos: this.state.todos.filter(x => x.id != id)
+      todos: [...newArray]
     })
   }
 
-  // event handler
-  addNewTodo(){
-    let obj = {
-      id: 5, 
-      name: 'Mới thêm', 
-      isCompleted: false
-    }
-
+  changeDisplayStatus = (status) => {
     this.setState({
-      todos: [...this.state.todos, obj]
-    })
+      displayStatus: status
+    }); 
   }
+  
+  // status : "all" or "active" or "completed" 
+  filterStatus = (status) => {
+    this.setState({
+      displayStatus: status
+    }); 
+  }
+
+  // clear all completed 
+  clearAll = () => {
+    let {todos} = this.state;
+    this.setState({
+      todos: [...todos.filter(x => !x.isCompleted)]
+    });
+  }
+  // obj1, obj2, OBJ3, obj4, obj5
   // Condition rendering 
 
   // list rendering in react 
-  render(){    
+  render(){  
+    let {todos, displayStatus} = this.state;
+    if(displayStatus == "active"){
+      todos = todos.filter(x => !x.isCompleted); 
+    }else if(displayStatus == "completed"){
+      todos = todos.filter(x => x.isCompleted); 
+    }
+
+    let actives = this.state.todos.filter(x => !x.isCompleted); 
+
     return (
       <div>
         <h1> Todos </h1>
-        <button onClick={this.addNewTodo2}> Thêm mới todo </button>
-        <button onClick={() => {this.deleteTodo(2)}}> Delete todo </button>
         <div className='box'>
           <div className='box-header'>
-            <input placeholder='nhập công việc'/>
+            <input placeholder='nhập công việc' onKeyUp={this.enterData}/>
           </div>
           <div className='box-body'>
             <div className='list'>          
               {
                 // template string 
-                this.state.todos.map(x => (
-                  <Todo key={x.id} todo={x}/>
+                todos.map(x => (
+                  <Todo changeCompletedEvent={this.changeStatusCompleted} 
+                        deleteItem={this.deleteItem}
+                  key={x.id} todo={x}/>
                 ))              
               }
               
             </div>
           </div>
           <div className='box-footer d-flex'>
-            <p>1 item left </p>
+            <p>{actives.length} item left </p>
             <div className='d-flex'>
-              <button>All</button>
-              <button>Active</button>
-              <button>Completed</button>
+              <button onClick={() => {this.filterStatus("all")}}>All</button>
+              <button onClick={() => {this.filterStatus("active")}}>Active</button>
+              <button onClick={() => {this.filterStatus("completed")}}>Completed</button>
             </div>          
-            <p>Clear completed</p>
+            <p onClick={this.clearAll}>Clear completed</p>
           </div>
         </div>
       </div>
@@ -102,30 +145,3 @@ class App extends Component {
 
 export default App;
 
-// bài tập  
-// viết 1 app hiển thị danh sách sinh viên  
-// dữ liệu mẫu 
-let students = [
-  {
-    id: 1, 
-    name: "Hoa", 
-    gender: 0,  // Yêu cầu: hiển thị dạng nam (1), nữ(0)
-    phone: "0123232323"
-  },
-  {
-    id: 2, 
-    name: "A",
-    gender: 1,
-    phone: "0123232332"
-  }
-]
-
-// class component 
-// function component
-
-// <div key={x.id} className={`item ${x.isCompleted? 'completed': ''}`}>
-                //   {x.isCompleted && <input type='checkbox' defaultChecked/>}
-                //   {!x.isCompleted && <input type='checkbox'/>}
-                //   <span> {x.name} </span>
-                //   <button> Delete </button>
-                // </div>

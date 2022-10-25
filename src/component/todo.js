@@ -7,15 +7,34 @@ class Todo extends React.Component
     }
     render(){
         let todoItem = this.props.todo;
+        let {changeCompletedEvent, deleteItem} = this.props; // destructuring
         return (
             <div className={`item ${todoItem.isCompleted? 'completed': ''}`}>
-                {todoItem.isCompleted && <input type='checkbox' defaultChecked/>}
-                {!todoItem.isCompleted && <input type='checkbox'/>}
+                {todoItem.isCompleted 
+                    && <input onChange={() => {changeCompletedEvent(todoItem.id)}} type='checkbox' defaultChecked/>}
+                
+                {!todoItem.isCompleted 
+                    && <input onChange={() => {changeCompletedEvent(todoItem.id)}} type='checkbox'/>}
                 <span> {todoItem.name} </span>
-                <button> Delete </button>
+                <button onClick={() => {deleteItem(todoItem.id)}}> Delete </button>
             </div>
         )
     }
 } 
 
 export default Todo;
+ 
+
+//let name = obj.name; 
+
+// let {name} = obj;
+
+
+// this.props = {
+//     changeCompletedEvent: "abc", 
+//     todo: {}
+// }
+
+// let {changeCompletedEvent} = this.props; 
+
+// let changeCompletedEvent = this.props.changeCompletedEvent; 
